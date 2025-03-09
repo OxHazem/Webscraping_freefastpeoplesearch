@@ -37,6 +37,7 @@ def main():
             address = row['Address']
 
             if (zip is None or address is None) or (result_data['Id'] == Id).any():
+                print("Skipping")
                 continue
 
             # search for this person
@@ -55,12 +56,13 @@ def main():
             content = extract_content(Id, driver.page_source)
             if content:
                 # write phones to Excel file
-                print("Data Found " + {content})
+                print(f"Data Found {content}")
                 # Append the found value to the dataframe
                 result_data = pd.concat([result_data, pd.DataFrame([content])], ignore_index=True)
             else:
-                print("No Data Found {content}")
+                print(f"No Data Found {content}")
 
+            result_data.to_csv('../data/result_data.csv', index=False)
             # wait 1 second before searching for the next person
             time.sleep(1)
 
