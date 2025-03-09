@@ -1,7 +1,9 @@
 
-from utils import open_chrome_with_profile, open_xlsx_file, extract_phones_from_page, write_phones_to_xlsx_file
+from utils import open_chrome_with_profile, extract_content
 import time
-
+import pandas as pd
+import os
+import csv
 
 def main():
     driver = open_chrome_with_profile()  # Open Chrome with profile
@@ -14,24 +16,33 @@ def main():
         if "Access Denied" in driver.page_source:
             return 1
     
+    filename = '../data/result_data.csv'
+    header = ['Id', 'Address', 'Zip']
+
+    # Check if the file exists before writing the header
+    if not os.path.exists(filename):
+        with open(filename, mode='w', newline='') as file:
+            writer = csv.DictWriter(file, fieldnames=header)
+            writer.writeheader()  # Write header only if file is newly created
+
     start = 1
-    wb, ws = open_xlsx_file()  # Open the Excel file
+    data = pd.read_csv('../data/data.csv') # Open the Csv file
+    result_data = pd.read_csv('../data/result_data.csv')
     # for each row in the Excel file search for the person and write the phones to the Excel file
-    for row in range(2, ws.max_row + 1):
+    for index, row in data.iterrows():
         # try searching for this person
         try:
-            first_name = ws[FIRST_NAME_COL + str(row)].value
-            last_name = ws[LAST_NAME_COL + str(row)].value
-            address = ws[ADDRESS_COL + str(row)].value
+            Id = row['Id']
+            zip = row['Zip']
+            address = row['Address']
 
-            if (first_name is None and last_name is None) or address is None:
+            if (zip is None or address is None) or (result_data['Id'] == Id).any():
                 continue
 
             # search for this person
-            first_name = first_name.replace(" ", "-")
-            last_name = last_name.replace(" ", "-")
-            address = address.replace(" ", "-")
-            driver.get("https://www.fastpeoplesearch.com/name/" + first_name + "-" + last_name + "_" + address)
+            zip = str(zip).replace(" ", "-")
+            address = str(address).replace(" ", "-")
+            driver.get("https://www.fastpeoplesearch.com/address/" + address + "_" + zip)
             time.sleep(10)
 
             if start:
@@ -40,13 +51,15 @@ def main():
                 start = 0
 
             # try to get all phones for this person as a list of strings
-            phones = extract_phones_from_page(driver.page_source)
-            if phones:
+            print("Extracting Content of page")
+            content = extract_content(Id, driver.page_source)
+            if content:
                 # write phones to Excel file
-                print("Found " + str(len(phones)) + " phones for " + first_name + " " + last_name)
-                write_phones_to_xlsx_file(wb, ws, phones, row)
+                print("Data Found " + {content})
+                # Append the found value to the dataframe
+                result_data = pd.concat([result_data, pd.DataFrame([content])], ignore_index=True)
             else:
-                print("No phones found for " + first_name + " " + last_name)
+                print("No Data Found {content}")
 
             # wait 1 second before searching for the next person
             time.sleep(1)
@@ -54,8 +67,8 @@ def main():
         except Exception as e:
             print(str(e))
             continue
-
-    wb.close()
+    
+    result_data.to_csv('../data/result_data.csv', index=False)
     driver.close()
 
 
