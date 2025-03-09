@@ -1,4 +1,4 @@
-from config import FIRST_NAME_COL, LAST_NAME_COL, ADDRESS_COL
+
 from utils import open_chrome_with_profile, open_xlsx_file, extract_phones_from_page, write_phones_to_xlsx_file
 import time
 
