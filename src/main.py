@@ -36,7 +36,7 @@ def main():
             address = row['Address']
 
             if (zip is None or address is None) or (result_data['Id'] == Id).any():
-                print("Skipping")
+                print(f"Skipping {Id}")
                 continue
 
             # search for this person
