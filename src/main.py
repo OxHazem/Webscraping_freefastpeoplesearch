@@ -16,8 +16,8 @@ def main():
         if "Access Denied" in driver.page_source:
             return 1
     
-    filename = '../data/result_data.csv'
-    header = ['Id', 'Address', 'Zip']
+    filename = '../output/result_data.csv'
+    header = ['Id', 'Name', 'Phone']
 
     # Check if the file exists before writing the header
     if not os.path.exists(filename):
@@ -27,7 +27,7 @@ def main():
 
     start = 1
     data = pd.read_csv('../data/data.csv') # Open the Csv file
-    result_data = pd.read_csv('../data/result_data.csv')
+    result_data = pd.read_csv('../output/result_data.csv')
     # for each row in the Excel file search for the person and write the phones to the Excel file
     for index, row in data.iterrows():
         # try searching for this person
@@ -62,7 +62,7 @@ def main():
             else:
                 print(f"No Data Found {content}")
 
-            result_data.to_csv('../data/result_data.csv', index=False)
+            result_data.to_csv('../output/result_data.csv', index=False)
             # wait 1 second before searching for the next person
             time.sleep(1)
 
@@ -70,7 +70,7 @@ def main():
             print(str(e))
             continue
     
-    result_data.to_csv('../data/result_data.csv', index=False)
+    result_data.to_csv('../output/result_data.csv', index=False)
     driver.close()
 
 
