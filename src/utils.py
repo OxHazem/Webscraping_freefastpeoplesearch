@@ -48,10 +48,9 @@ def extract_content(Id, page_source):
         # find phone number
         
         soup = bs4.BeautifulSoup(page_source, "html.parser")
-        # find all a tags with title containing "Call"
-        target = soup.find("div", class_='people-list')[0]
+        
         print("Finding name")
-        name = target.find('h2', class_='card-title').find('span', class_='larger').text.strip()
+        name = soup.find('h2', class_='card-title').find('span', class_='larger').text.strip()
         print("Finding Phone number")
         phone = soup.find('a', class_='nowrap').text.strip()
 
@@ -64,6 +63,8 @@ def extract_content(Id, page_source):
     except Exception as e:
         print(str(e))
         return {
-            'Id': Id
+            'Id': Id,
+            "Name": "NOT FOUND",
+            "Phone": "NOT FOUND"
         }
     

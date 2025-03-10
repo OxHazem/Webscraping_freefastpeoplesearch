@@ -1,4 +1,3 @@
-
 from utils import open_chrome_with_profile, extract_content
 import time
 import pandas as pd
