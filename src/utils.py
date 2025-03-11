@@ -46,20 +46,28 @@ def extract_content(Id, page_source):
 
     try:
         # find phone number
-        
+        #returned_list=[]
         soup = bs4.BeautifulSoup(page_source, "html.parser")
         
         print("Finding name")
         name = soup.find('h2', class_='card-title').find('span', class_='larger').text.strip()
+        #print("Finding Address")
+        #address=soup.find(#the address of html location)
+        # if(address==address):
+        # return_list.append({
+        #     'Id': Id,
+        #     'Name': name,
+        #     'Phone': phone
+        # })
         print("Finding Phone number")
         phone = soup.find('a', class_='nowrap').text.strip()
 
+        #dont forget to return the list 
         return {
             'Id': Id,
             'Name': name,
             'Phone': phone
         }
-
     except Exception as e:
         print(str(e))
         return {

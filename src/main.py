@@ -16,7 +16,7 @@ def main():
             return 1
     
     filename = '../output/result_data.csv'
-    header = ['Id', 'Name', 'Phone']
+    header = ['Id','Address', 'Name', 'Phone']
 
     # Check if the file exists before writing the header
     if not os.path.exists(filename):
