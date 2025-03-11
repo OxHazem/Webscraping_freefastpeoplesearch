@@ -25,7 +25,7 @@ def main():
             writer.writeheader()  # Write header only if file is newly created
 
     start = 1
-    data = pd.read_csv('../data/data.csv') # Open the Csv file
+    data = pd.read_csv('../data/Philly PA List.csv') # Open the Csv file
     result_data = pd.read_csv('../output/result_data.csv')
     # for each row in the Excel file search for the person and write the phones to the Excel file
     for index, row in data.iterrows():

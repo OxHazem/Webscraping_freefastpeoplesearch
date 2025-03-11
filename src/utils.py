@@ -48,17 +48,14 @@ def extract_content(Id, page_source):
         # find phone number
         #returned_list=[]
         soup = bs4.BeautifulSoup(page_source, "html.parser")
-        
+        #Finding The Name
         print("Finding name")
         name = soup.find('h2', class_='card-title').find('span', class_='larger').text.strip()
-        #print("Finding Address")
-        #address=soup.find(#the address of html location)
-        # if(address==address):
-        # return_list.append({
-        #     'Id': Id,
-        #     'Name': name,
-        #     'Phone': phone
-        # })
+        print("Finding Address")
+        #Find the Division  of the Address
+        div=soup.find('div',style="line-height:20px;margin-bottom:15px")
+        address=div.find('a').text.strip()
+        #Finding the Phone Number
         print("Finding Phone number")
         phone = soup.find('a', class_='nowrap').text.strip()
 
@@ -66,6 +63,7 @@ def extract_content(Id, page_source):
         return {
             'Id': Id,
             'Name': name,
+            'Address' : address,
             'Phone': phone
         }
     except Exception as e:
@@ -73,6 +71,8 @@ def extract_content(Id, page_source):
         return {
             'Id': Id,
             "Name": "NOT FOUND",
-            "Phone": "NOT FOUND"
+            "Address" : "NOT Found",
+            "Phone": "NOT FOUND",
         }
+
     
