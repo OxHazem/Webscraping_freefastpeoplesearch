@@ -5,6 +5,7 @@ import pandas as pd
 import bs4
 import csv
 
+
 def open_chrome_with_profile():
     # Create a new Chrome session with the Chrome profile
 

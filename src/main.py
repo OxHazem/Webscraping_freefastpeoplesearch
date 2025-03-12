@@ -3,6 +3,7 @@ import time
 import pandas as pd
 import os
 import csv
+import random
 
 def main():
     driver = open_chrome_with_profile()  # Open Chrome with profile
@@ -10,7 +11,7 @@ def main():
     # if access denied, wait for user to enable vpn (only for the first time)
     if "Access Denied" in driver.page_source:
         print("Access Denied")
-        time.sleep(60)  # Wait for the user to enable vpn extension
+        time.sleep(random.uniform(5,15))  # Wait for the user to enable vpn extension
         driver.get("https://www.fastpeoplesearch.com/")  # Navigate to FastPeopleSearch.com
         if "Access Denied" in driver.page_source:
             return 1
@@ -43,7 +44,7 @@ def main():
             zip = str(zip).replace(" ", "-")
             address = str(address).replace(" ", "-")
             driver.get("https://www.fastpeoplesearch.com/address/" + address + "_" + zip)
-            time.sleep(10)
+            time.sleep(random.uniform(6,10))  # wait 6-10 seconds for the page to load
 
             if start:
                 print("CAPTCHA detected! Solve it manually...")
@@ -63,7 +64,7 @@ def main():
 
             result_data.to_csv('../output/result_data.csv', index=False)
             # wait 1 second before searching for the next person
-            time.sleep(1)
+            time.sleep(random.uniform(1, 8))
 
         except Exception as e:
             print(str(e))
