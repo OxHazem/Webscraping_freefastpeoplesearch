@@ -4,6 +4,7 @@ from config import profile_path, chromedriver_path
 import pandas as pd 
 import bs4
 import csv
+import subprocess
 
 
 def open_chrome_with_profile():
@@ -41,7 +42,7 @@ def save_to_csv(content):
         writer.writerows(content)  # Write data rows
 
 
-def extract_content(Id, page_source):
+def extract_content(Id, address, page_source):
     # Extract phones from the page source and return them as a list of strings
     # ID, New Name, New Phone
 
@@ -53,9 +54,6 @@ def extract_content(Id, page_source):
         print("Finding name")
         name = soup.find('h2', class_='card-title').find('span', class_='larger').text.strip()
         print("Finding Address")
-        #Find the Division  of the Address
-        div=soup.find('div',style="line-height:20px;margin-bottom:15px")
-        address=div.find('a').text.strip()
         #Finding the Phone Number
         print("Finding Phone number")
         phone = soup.find('a', class_='nowrap').text.strip()
@@ -76,4 +74,18 @@ def extract_content(Id, page_source):
             "Phone": "NOT FOUND",
         }
 
-    
+def connect_vpn():
+    try:
+        subprocess.run(['protonvpn-cli', 'connect', '--cc', 'US', '--protocol', 'tcp'], check=True)  # Connect to a US server
+        print("✅ Connected to ProtonVPN (US Region)")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Error connecting to VPN: {e}")
+        exit(1)
+
+# Function to disconnect from ProtonVPN
+def disconnect_vpn():
+    try:
+        subprocess.run(['protonvpn-cli', 'disconnect'], check=True)
+        print("✅ Disconnected from ProtonVPN")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Error disconnecting VPN: {e}")

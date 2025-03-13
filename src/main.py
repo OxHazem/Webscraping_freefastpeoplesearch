@@ -1,4 +1,4 @@
-from utils import open_chrome_with_profile, extract_content
+from utils import open_chrome_with_profile, extract_content, connect_vpn, disconnect_vpn
 import time
 import pandas as pd
 import os
@@ -6,6 +6,7 @@ import csv
 import random
 
 def main():
+    connect_vpn()
     driver = open_chrome_with_profile()  # Open Chrome with profile
     driver.get("https://www.fastpeoplesearch.com/")  # Navigate to FastPeopleSearch.com
     # if access denied, wait for user to enable vpn (only for the first time)
@@ -16,7 +17,7 @@ def main():
         if "Access Denied" in driver.page_source:
             return 1
     
-    filename = '../output/result_data.csv'
+    filename = '/home/amro/Desktop/Webscraping_freefastpeoplesearch/output/result_data.csv'
     header = ['Id','Address', 'Name', 'Phone']
 
     # Check if the file exists before writing the header
@@ -26,8 +27,8 @@ def main():
             writer.writeheader()  # Write header only if file is newly created
 
     start = 1
-    data = pd.read_csv('../data/Philly PA List.csv') # Open the Csv file
-    result_data = pd.read_csv('../output/result_data.csv')
+    data = pd.read_csv('/home/amro/Desktop/Webscraping_freefastpeoplesearch/data/Philly PA List.csv') # Open the Csv file
+    result_data = pd.read_csv('/home/amro/Desktop/Webscraping_freefastpeoplesearch/output/result_data.csv')
     # for each row in the Excel file search for the person and write the phones to the Excel file
     for index, row in data.iterrows():
         # try searching for this person
@@ -53,16 +54,21 @@ def main():
 
             # try to get all phones for this person as a list of strings
             print("Extracting Content of page")
-            content = extract_content(Id, driver.page_source)
+            content = extract_content(Id, address, driver.page_source)
             if content:
-                # write phones to Excel file
-                print(f"Data Found {content}")
+                if content['Phone'] == "NOT FOUND":
+                    print("Rebooting VPN...")
+                    disconnect_vpn()
+                    connect_vpn()
+                    driver.get("https://www.fastpeoplesearch.com/address/" + address + "_" + zip)
+                    time.sleep(random.uniform(6,10))  # wait 6-10 seconds for the page to load
+                    content = extract_content(Id, address, driver.page_source)
                 # Append the found value to the dataframe
                 result_data = pd.concat([result_data, pd.DataFrame([content])], ignore_index=True)
             else:
                 print(f"No Data Found {content}")
 
-            result_data.to_csv('../output/result_data.csv', index=False)
+            result_data.to_csv('/home/amro/Desktop/Webscraping_freefastpeoplesearch/output/result_data.csv', index=False)
             # wait 1 second before searching for the next person
             time.sleep(random.uniform(1, 8))
 
@@ -70,7 +76,8 @@ def main():
             print(str(e))
             continue
     
-    result_data.to_csv('../output/result_data.csv', index=False)
+    result_data.to_csv('/home/amro/Desktop/Webscraping_freefastpeoplesearch/output/result_data.csv', index=False)
+    disconnect_vpn()  # Disconnect from VPN after all searches are done
     driver.close()
 
 
