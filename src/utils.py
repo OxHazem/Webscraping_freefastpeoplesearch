@@ -1,4 +1,3 @@
-#for the fuctions of the webscrapping 
 import undetected_chromedriver as uc
 from config import profile_path, chromedriver_path
 import pandas as pd 
@@ -76,8 +75,8 @@ def extract_content(Id, address, page_source):
 
 def connect_vpn():
     try:
-        subprocess.run(['windscribe-cli', 'connect', '--cc', 'US', '--protocol', 'tcp'], check=True)  # Connect to a US server
-        print("✅ Connected to ProtonVPN (US Region)")
+        subprocess.run(['windscribe-cli', 'connect','US', 'stealth'], check=True)  # Connect to a US server
+        print("✅ Connected to Windscribe (US Region)")
     except subprocess.CalledProcessError as e:
         print(f"❌ Error connecting to VPN: {e}")
         exit(1)
@@ -86,6 +85,6 @@ def connect_vpn():
 def disconnect_vpn():
     try:
         subprocess.run(['windscribe-cli', 'disconnect'], check=True)
-        print("✅ Disconnected from ProtonVPN")
+        print("✅ Disconnected from Windscribe")
     except subprocess.CalledProcessError as e:
         print(f"❌ Error disconnecting VPN: {e}")

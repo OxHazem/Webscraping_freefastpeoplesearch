@@ -1,6 +1,6 @@
 import os
 
-chromedriver_path = "/usr/local/bin/chromedriver" # Path to ChromeDriver executable
+chromedriver_path = "D:\DownLoad\chromedriver-win64\chromedriver-win64\chromedriver.exe" # Path to ChromeDriver executable
 
 CURR_SCRIPT_PATH = os.path.realpath(os.path.dirname(__file__))
 # CURR_SCRIPT_PATH = os.path.dirname(sys.executable)
