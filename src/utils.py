@@ -76,7 +76,7 @@ def extract_content(Id, address, page_source):
 
 def connect_vpn():
     try:
-        subprocess.run(['protonvpn-cli', 'connect', '--cc', 'US', '--protocol', 'tcp'], check=True)  # Connect to a US server
+        subprocess.run(['windscribe-cli', 'connect', '--cc', 'US', '--protocol', 'tcp'], check=True)  # Connect to a US server
         print("✅ Connected to ProtonVPN (US Region)")
     except subprocess.CalledProcessError as e:
         print(f"❌ Error connecting to VPN: {e}")
@@ -85,7 +85,7 @@ def connect_vpn():
 # Function to disconnect from ProtonVPN
 def disconnect_vpn():
     try:
-        subprocess.run(['protonvpn-cli', 'disconnect'], check=True)
+        subprocess.run(['windscribe-cli', 'disconnect'], check=True)
         print("✅ Disconnected from ProtonVPN")
     except subprocess.CalledProcessError as e:
         print(f"❌ Error disconnecting VPN: {e}")

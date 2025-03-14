@@ -27,8 +27,8 @@ def main():
             writer.writeheader()  # Write header only if file is newly created
 
     start = 1
-    data = pd.read_csv('/home/amro/Desktop/Webscraping_freefastpeoplesearch/data/Philly PA List.csv') # Open the Csv file
-    result_data = pd.read_csv('/home/amro/Desktop/Webscraping_freefastpeoplesearch/output/result_data.csv')
+    data = pd.read_csv("D:\\DownLoad\\projects\\webscraping_freefasrpeoplesaerch\\Webscraping_freefastpeoplesearch\\data\\Philly PA List.csv") # Open the Csv file
+    result_data = pd.read_csv('D:\\DownLoad\\projects\\webscraping_freefasrpeoplesaerch\\Webscraping_freefastpeoplesearch]\\output\\result_data.csv')
     # for each row in the Excel file search for the person and write the phones to the Excel file
     for index, row in data.iterrows():
         # try searching for this person
@@ -68,9 +68,9 @@ def main():
             else:
                 print(f"No Data Found {content}")
 
-            result_data.to_csv('/home/amro/Desktop/Webscraping_freefastpeoplesearch/output/result_data.csv', index=False)
+            result_data.to_csv('D:\DownLoad\projects\webscraping_freefasrpeoplesaerch\Webscraping_freefastpeoplesearch\output\\result_data.csv', index=False)
             # wait 1 second before searching for the next person
-            time.sleep(random.uniform(1, 8))
+            time.sleep(random.uniform(1, 15))
 
         except Exception as e:
             print(str(e))
