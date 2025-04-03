@@ -45,7 +45,7 @@ def main():
                 zip = str(zip).replace(" ", "-")
                 address = str(address).replace(" ", "-")
                 driver.get("https://www.fastpeoplesearch.com/address/" + address + "_" + zip)
-                time.sleep(random.uniform(6,15))  # wait 6-10 seconds for the page to load
+                time.sleep(random.uniform(5,10))  # wait 6-10 seconds for the page to load
 
                 if start:
                     print("CAPTCHA detected! Solve it manually...")
@@ -59,13 +59,13 @@ def main():
                     if content['Name'] == "NOT FOUND":
                         print("Rebooting VPN...")
                         disconnect_vpn()
+                        driver.delete_all_cookies()
                         driver.quit()
                         connect_vpn()
-                        time.sleep(random.uniform(60,120))
+                        time.sleep(random.uniform(5, 10))
                         driver = open_chrome_with_profile()
-
                         driver.get("https://www.fastpeoplesearch.com/address/" + address + "_" + zip)
-                        time.sleep(random.uniform(15,45)) #wait 6-10 seconds for the page to load
+                        time.sleep(random.uniform(5,10))
                         content = extract_content(Id, address,driver.page_source)
                     # Append the found value to the dataframe
                     result_data = pd.concat([result_data, pd.DataFrame([content])], ignore_index=True)
@@ -74,7 +74,7 @@ def main():
 
                 result_data.to_csv('D:\DownLoad\projects\webscraping_freefasrpeoplesaerch\Webscraping_freefastpeoplesearch\output\\result_data.csv', index=False)
                 # wait 1 second before searching for the next person
-                time.sleep(random.uniform(15, 45))
+                time.sleep(random.uniform(5, 10))
 
             except Exception as e:
                 print(str(e))
@@ -82,7 +82,7 @@ def main():
         
         result_data.to_csv('D:\DownLoad\projects\webscraping_freefasrpeoplesaerch\Webscraping_freefastpeoplesearch\output\\result_data.csv', index=False)
         disconnect_vpn()  # Disconnect from VPN after all searches are done
-        driver.close()
+        driver.quit()
 
 
 if __name__ == "__main__":

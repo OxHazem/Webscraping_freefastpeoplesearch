@@ -4,14 +4,19 @@ import pandas as pd
 import bs4
 import csv
 import subprocess
-
+from fake_useragent import UserAgent
+def get_random_user_agent():
+    ua=UserAgent()
+    return ua.random
 
 def open_chrome_with_profile():
     # Create a new Chrome session with the Chrome profile
 
     # options = Options()
     options = uc.ChromeOptions()
+    options.add_argument(f"--user-agent={get_random_user_agent()}")
     options.add_argument("--user-data-dir=" + profile_path)
+    
 
     # Create a new instance of the Chrome driver with the specified options
     # driver = webdriver.Chrome(executable_path=chromedriver_path, chrome_options=options)
